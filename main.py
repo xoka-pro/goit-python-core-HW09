@@ -1,14 +1,10 @@
-import json
-
-
-def read_file():
-    with open('contacts.json', 'r', encoding='UTF-8') as file:
-        return json.load(file)
-
-
-def write_file(contacts):
-    with open('contacts.json', 'w', encoding='UTF-8') as file:
-        json.dump(contacts, file)
+contacts = {"John": "+380661234567",
+            "Nik": "+380951234567",
+            "Ann": "0672345678",
+            "Bill": "0504567890",
+            "Corey": "(0973456780)",
+            "Kevin": "0999875645",
+            }
 
 
 def input_error(func):
@@ -42,14 +38,11 @@ def add(*args) -> str:
     "add ...". За цією командою бот зберігає у пам'яті (у словнику, наприклад) новий контакт.
     Замість ... користувач вводить ім'я та номер телефону, обов'язково через пробіл.
     """
-    name = args[0]
-    number = args[1]
-    contacts = read_file()
-    if contacts.get(args[0]):
+
+    name, number, *_ = args
+    if name in contacts:
         return f'This contact already exist'
-    else:
-        contacts.update({name: number})
-    write_file(contacts)
+    contacts.update({name: number})
     return f'Contact add successfully'
 
 
@@ -59,14 +52,12 @@ def change(*args) -> str:
     "change ..." За цією командою бот зберігає в пам'яті новий номер телефону існуючого контакту.
     Замість ... користувач вводить ім'я та номер телефону, обов'язково через пробіл.
     """
-    name = args[0]
-    number = args[1]
-    contacts = read_file()
-    if contacts.get(name):
+
+    name, number, *_ = args
+    if name in contacts:
         contacts.update({name: number})
     else:
         return f'No contact "{name}"'
-    write_file(contacts)
     return f'Contact change successfully'
 
 
@@ -76,8 +67,8 @@ def phone(*args) -> str:
     "phone ...." За цією командою бот виводить у консоль номер телефону для зазначеного контакту.
     Замість ... користувач вводить ім'я контакту, чий номер треба показати.
     """
+
     name = args[0]
-    contacts = read_file()
     if contacts.get(name):
         return '\t{:>20} : {:<12} '.format(name, contacts.get(name))
     else:
@@ -89,7 +80,7 @@ def show_all() -> str:
     """
     "show all". За цією командою бот виводить всі збереженні контакти з номерами телефонів у консоль.
     """
-    contacts = read_file()
+
     result = []
     for name, numbers in contacts.items():
         result.append('\t{:>20} : {:<12} '.format(name, numbers))
