@@ -101,7 +101,9 @@ def show_all() -> str:
 def hlp(*args) -> str:
     return f'Known commands: hello, help, add, change, phone, show all, good bye, close, exit.'
 
+
 def parser(msg: str):
+    """ Parser and handler AIO """
     command = None
     params = []
 
